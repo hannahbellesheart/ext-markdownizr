@@ -31,60 +31,128 @@ Electron Fiddle recognizes these files:
 
 ## Features
 
-### Core Functionality
-- 🔄 **Real-time HTML to Markdown conversion** with debouncing for performance
-- 👁️ **Preview rendered Markdown** in a beautiful modal
-- 📋 **Copy to Clipboard** with one click
-- 📊 **Character & Word Count** for both inputs
+### 🔄 Core Conversion
+- **Real-time HTML to Markdown** - Instant conversion as you type
+- **Debounced Processing** - Optimized for large inputs (300ms delay)
+- **Custom Filtering Rules** - Strips container elements, removes scripts
+- **Error Handling** - Graceful degradation with error messages
+- **Initial Content** - Pre-loaded with example HTML
 
-### File Operations
-- 📂 **Import HTML files** (Ctrl/Cmd + O)
-- 💾 **Export Markdown files** (Ctrl/Cmd + S)
-- 📁 **Drag & drop support** for HTML files
+### 📋 Clipboard & Preview
+- **Copy to Clipboard** - One-click copy with visual feedback
+- **Markdown Preview Modal** - See rendered HTML output
+- **Toast Notifications** - Non-intrusive success/error messages
+- **Auto-copy on Ctrl+C** - Smart clipboard when focused on markdown
 
-### UI Enhancements
-- 🌙 **Dark Mode** toggle with persistence
-- 🔄 **Swap Panels** to reverse inputs
-- 🗑️ **Clear All** button (Ctrl/Cmd + K)
-- 🎨 **Beautiful, modern interface**
-- ⚡ **Fast and responsive**
+### 📊 Statistics & Tracking
+- **Character Count** - Real-time character tracking
+- **Word Count** - Accurate word count for markdown output
+- **Conversion History** - Stores last 10 conversions in localStorage
+- **History Modal** - Browse and restore previous conversions
+- **Click to Restore** - One-click to load historical conversions
 
-### Smart Features
-- 📜 **Conversion History** - Keeps last 10 conversions
-- 💾 **Settings Persistence** - Remembers theme & window size
-- 🪟 **Window State** - Remembers position and size
-- 🎯 **Application Menu** - Professional desktop app experience
+### 📂 File Operations
+- **Open HTML Files** (Ctrl/Cmd + O) - Import HTML from disk (10MB limit)
+- **Save Markdown Files** (Ctrl/Cmd + S) - Export to .md, .markdown, or .txt
+- **File Validation** - Size checks and error handling
+- **Success Dialogs** - Confirmation on successful save
+
+### 🎨 UI & Theme
+- **Dark Mode Toggle** (Ctrl/Cmd + D) - Full dark theme with persistence
+- **Swap Panels** (Ctrl/Cmd + Shift + S) - Reverse HTML/Markdown positions
+- **Clear All** (Ctrl/Cmd + K) - Reset both panels with confirmation
+- **Modern Gradient Design** - Beautiful purple/blue color scheme
+- **Responsive Layout** - Adapts to different screen sizes
+- **Watermark Effects** - Subtle background text effects
+
+### 🪟 Window Management
+- **Window State Persistence** - Remembers size and position
+- **Minimum Size** - 900x600 minimum dimensions
+- **Default Size** - 1400x900 starting dimensions
+- **Smooth Transitions** - Fade-in on launch (no flicker)
+- **macOS Integration** - Proper dock icon behavior
+
+### 📝 Application Menu
+- **File Menu** - Open, Save, Clear, Quit
+- **Edit Menu** - Undo, Redo, Cut, Copy, Paste, Select All
+- **View Menu** - Dark Mode, Swap, Reload, DevTools, Zoom, Fullscreen
+- **History Menu** - Show History, Clear History
+- **Help Menu** - About dialog with version info
+
+### ⚡ Performance & Security
+- **Debounced Conversion** - Prevents UI lag during typing
+- **Context Isolation** - Secure renderer process
+- **No Node Integration** - Security best practice
+- **IPC Communication** - Secure preload bridge
+- **Error Boundaries** - Comprehensive try-catch blocks
+- **Input Validation** - File size limits and type checking
 
 ## How to Use
 
-1. **Paste HTML** in the left textarea (or import a file)
-2. **See Markdown** output on the right instantly
-3. **Click Copy** to copy Markdown to clipboard
-4. **Click Preview** to see rendered HTML version
-5. **Access History** to revisit previous conversions
+### Basic Workflow
+1. **Paste HTML** in the left textarea (or File → Open HTML File)
+2. **See Markdown** appear instantly in the right textarea
+3. **Copy to Clipboard** - Click the 📋 Copy button
+4. **Preview Rendered** - Click the 👁️ Preview button to see HTML output
+5. **Save to File** - Click File → Save Markdown As (or Ctrl/Cmd + S)
+
+### Additional Features
+- **View History** - Click 📜 History button or Ctrl/Cmd + H
+- **Toggle Dark Mode** - Click 🌙 Dark button or Ctrl/Cmd + D
+- **Clear Content** - Click 🗑️ Clear All button or Ctrl/Cmd + K
+- **Swap Sides** - Click 🔄 Swap button or Ctrl/Cmd + Shift + S
+- **Check Stats** - Character and word count shown below markdown panel
+
+### Tips
+- Conversion happens automatically as you type (300ms debounce)
+- History stores your last 10 conversions automatically
+- Dark mode preference is saved between sessions
+- Window size and position are remembered
+- Large HTML files (up to 10MB) are supported
 
 ## Keyboard Shortcuts
 
-### Conversion
-- `Ctrl/Cmd + Enter` - Manually trigger conversion
-- `Ctrl/Cmd + C` (on Markdown panel) - Copy to clipboard
+### 🔄 Conversion
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl/Cmd + Enter` | Manually trigger conversion |
+| `Ctrl/Cmd + C` | Auto-copy when focused on Markdown panel |
 
-### File Operations
-- `Ctrl/Cmd + O` - Open HTML file
-- `Ctrl/Cmd + S` - Save Markdown as file
-- `Ctrl/Cmd + K` - Clear all content
+### 📂 File Operations
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl/Cmd + O` | Open HTML file from disk |
+| `Ctrl/Cmd + S` | Save Markdown to file |
+| `Ctrl/Cmd + K` | Clear all content (with confirmation) |
 
-### View
-- `Ctrl/Cmd + D` - Toggle dark mode
-- `Ctrl/Cmd + Shift + S` - Swap panels
-- `Ctrl/Cmd + H` - Show history
-- `ESC` - Close any modal
+### 🎨 View & UI
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl/Cmd + D` | Toggle dark mode |
+| `Ctrl/Cmd + Shift + S` | Swap HTML/Markdown panels |
+| `Ctrl/Cmd + H` | Show conversion history |
+| `ESC` | Close any open modal |
+| `Ctrl/Cmd + 0` | Reset zoom |
+| `Ctrl/Cmd + Plus` | Zoom in |
+| `Ctrl/Cmd + Minus` | Zoom out |
 
-### Standard
-- `Ctrl/Cmd + Z` - Undo
-- `Ctrl/Cmd + Shift + Z` - Redo
-- `Ctrl/Cmd + A` - Select all
-- `Ctrl/Cmd + X/C/V` - Cut/Copy/Paste
+### ✏️ Standard Editing
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl/Cmd + Z` | Undo |
+| `Ctrl/Cmd + Shift + Z` | Redo |
+| `Ctrl/Cmd + A` | Select all |
+| `Ctrl/Cmd + X` | Cut |
+| `Ctrl/Cmd + C` | Copy |
+| `Ctrl/Cmd + V` | Paste |
+
+### 🐛 Developer
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl/Cmd + R` | Reload window |
+| `Ctrl/Cmd + Shift + R` | Force reload |
+| `Ctrl/Cmd + Shift + I` | Toggle Developer Tools |
+| `F11` | Toggle fullscreen |
 
 ## Technology
 
