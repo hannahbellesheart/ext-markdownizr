@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdownizr Demo - HTML to Markdown Converter</title>
+    <meta name="description" content="Convert HTML to Markdown in real-time. A simple, fast, and free web-based converter.">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔻 Markdownizr Demo</h1>
+            <p>Convert HTML to Markdown in real-time! Paste your HTML code in the left panel and see it instantly transformed into clean Markdown.</p>
+        </header>
+        
+        <main class="demo-container">
+            <div class="panel">
+                <h2>HTML</h2>
+                <div class="watermark html-watermark">HTML</div>
+                <textarea id="html-input" placeholder="Paste your HTML here..."><div class="site-header clearfix" role="banner">
+  <div class="site-logo">HTML5 <span class="star">★</span> Boilerplate</div>
+  <ul class="site-nav inline-block-list">
+    <li><a href="https://github.com/h5bp/html5-boilerplate">Source code</a></li>
+    <li><a href="https://github.com/h5bp/html5-boilerplate/blob/5.2.0/dist/doc/TOC.md">Docs</a></li>
+    <li><a href="https://h5bp.github.io/">Other projects</a></li>
+  </ul>
+</div>
+<div class="site-promo">
+  <h1>The web's most popular front-end template</h1>
+  <p class="description">HTML5 Boilerplate helps you build <strong>fast</strong>, <strong>robust</strong>, and <strong>adaptable</strong> web apps or sites. Kick-start your project with the combined knowledge and effort of 100s of developers, all in one little package.</p>
+  <div class="cta-option"><a class="btn btn-download" href="https://github.com/h5bp/html5-boilerplate/releases/download/5.2.0/html5-boilerplate_v5.2.0.zip"><strong>Download</strong> <span class="version">v5.2.0</span></a> <a class="last-update" href="https://github.com/h5bp/html5-boilerplate/blob/5.2.0/CHANGELOG.md">See the CHANGELOG</a></div>
+  <div class="cta-option"><a class="btn btn-alt" href="http://www.initializr.com/">Get a custom build</a></div>
+</div></textarea>
+            </div>
+            
+            <div class="panel">
+                <h2>MARKDOWN</h2>
+                <div class="watermark md-watermark">MDWN</div>
+                <textarea id="markdown-output" readonly placeholder="Converted markdown will appear here..."></textarea>
+                <button id="preview-btn" class="preview-button" title="Preview rendered markdown">
+                    <span class="icon">👁️</span> Preview
+                </button>
+            </div>
+        </main>
+        
+        <!-- Modal for Markdown Preview -->
+        <div id="preview-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Markdown Preview</h2>
+                    <button id="close-modal" class="close-button">&times;</button>
+                </div>
+                <div id="preview-output" class="modal-body"></div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Powered by <a href="https://github.com/domchristie/turndown" target="_blank">Turndown</a> (successor to to-markdown)</p>
+        </footer>
+    </div>
+    
+    <!-- Using Turndown (successor to to-markdown) from CDN -->
+    <script src="https://unpkg.com/turndown/dist/turndown.js"></script>
+    <!-- Using Marked for Markdown to HTML conversion -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
