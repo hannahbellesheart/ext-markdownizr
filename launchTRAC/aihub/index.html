@@ -1,0 +1,2442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#6366f1">
+    <title>AI Tools Directory - Production Ready</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== CSS VARIABLES & DESIGN TOKENS ===== */
+        :root {
+            /* Colors */
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: rgba(99, 102, 241, 0.1);
+            --secondary: #10b981;
+            --secondary-light: rgba(16, 185, 129, 0.1);
+            --warning: #f59e0b;
+            --warning-light: rgba(245, 158, 11, 0.1);
+            --error: #ef4444;
+            --error-light: rgba(239, 68, 68, 0.1);
+            
+            /* Backgrounds */
+            --dark: #0f172a;
+            --darker: #0a0f1c;
+            --card-bg: rgba(30, 41, 59, 0.5);
+            --modal-bg: rgba(15, 23, 42, 0.95);
+            
+            /* Text */
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-light: #94a3b8;
+            
+            /* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            
+            /* Border Radius */
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --radius-2xl: 24px;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --shadow-glow: 0 0 20px 5px rgba(99, 102, 241, 0.4);
+            
+            /* Transitions */
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --transition-slow: 0.5s ease;
+            
+            /* Z-index */
+            --z-dropdown: 1000;
+            --z-sticky: 1020;
+            --z-modal: 1030;
+            --z-popover: 1040;
+            --z-tooltip: 1050;
+
+            /* Animation */
+            --animation-modal: 0.3s ease;
+        }
+
+        /* ===== RESET & BASE STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--light);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+            /* Prevent scroll when modal is open */
+            &.modal-open {
+                overflow: hidden;
+            }
+        }
+
+        /* ===== ACCESSIBILITY ===== */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: var(--primary);
+            color: white;
+            padding: 8px;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            z-index: 10000;
+            transition: top 0.3s;
+        }
+
+        .skip-link:focus {
+            top: 6px;
+        }
+
+        /* ===== LAYOUT COMPONENTS ===== */
+        .container {
+            display: flex;
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: var(--space-xl) var(--space-md);
+            gap: var(--space-xl);
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            /* CSS containment for performance */
+            contain: layout style;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-md) 5%;
+            position: sticky;
+            top: 0;
+            z-index: var(--z-sticky);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-xs);
+            border-radius: var(--radius-sm);
+        }
+
+        .logo:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 50px;
+            padding: var(--space-sm) var(--space-lg);
+            width: min(40%, 400px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all var(--transition-normal);
+            /* GPU acceleration */
+            transform: translateZ(0);
+        }
+
+        .search-container:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .search-container i {
+            color: var(--gray);
+            margin-right: var(--space-sm);
+        }
+
+        .search-container input {
+            background: transparent;
+            border: none;
+            color: var(--light);
+            width: 100%;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-container input::placeholder {
+            color: var(--gray);
+        }
+
+        /* ===== NAVIGATION ===== */
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: var(--space-lg);
+        }
+
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color var(--transition-fast);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-md);
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        /* ===== SIDEBAR & FILTERS ===== */
+        .sidebar {
+            width: min(100%, 300px);
+            background: var(--card-bg);
+            border-radius: var(--radius-xl);
+            padding: var(--space-lg);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+            /* CSS containment */
+            contain: layout style;
+        }
+
+        .sidebar h3 {
+            font-size: 1.125rem;
+            margin-bottom: var(--space-lg);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .filter-section {
+            margin-bottom: var(--space-md);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            background: rgba(30, 41, 59, 0.7);
+            transition: all var(--transition-normal);
+        }
+
+        .filter-header {
+            padding: var(--space-md);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color var(--transition-fast);
+            min-height: 44px;
+            background: rgba(30, 41, 59, 0.9);
+        }
+
+        .filter-header:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .filter-header h4 {
+            font-size: 1rem;
+            color: var(--light);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin: 0;
+        }
+
+        .filter-header .toggle-icon {
+            transition: transform var(--transition-normal);
+        }
+
+        .filter-section.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+
+        .filter-content {
+            padding: var(--space-md);
+            background: rgba(20, 30, 48, 0.5);
+            max-height: 400px;
+            overflow-y: auto;
+            transition: all var(--transition-normal);
+        }
+
+        .filter-section.collapsed .filter-content {
+            display: none;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            cursor: pointer;
+            transition: color var(--transition-fast);
+            color: var(--gray);
+            padding: var(--space-sm);
+            border-radius: var(--radius-sm);
+            min-height: 44px;
+        }
+
+        .filter-option:hover {
+            color: var(--light);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .filter-option.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .filter-option .checkmark {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gray);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-normal);
+            flex-shrink: 0;
+        }
+
+        .filter-option.active .checkmark {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .filter-option.active .checkmark::after {
+            content: "✓";
+            color: white;
+            font-size: 0.75rem;
+        }
+
+        .count-badge {
+            background: var(--secondary);
+            color: var(--darker);
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 700;
+            margin-left: auto;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-xl);
+            flex-wrap: wrap;
+            gap: var(--space-md);
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .sort-options {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            background: rgba(30, 41, 59, 0.7);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sort-options select {
+            background: transparent;
+            border: none;
+            color: var(--light);
+            outline: none;
+            cursor: pointer;
+            min-height: 44px;
+        }
+
+        .sort-options select option {
+            background: var(--dark);
+        }
+
+        /* ===== CARDS GRID ===== */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-md);
+            align-items: start;
+            /* CSS containment for performance */
+            contain: layout style;
+        }
+
+        .loading-skeleton {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-md);
+        }
+
+        .skeleton-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: var(--space-md);
+            height: 200px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: all var(--transition-normal);
+            opacity: 0;
+            transform: translateY(20px);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            /* CSS containment for performance */
+            contain: layout style paint;
+            /* GPU acceleration */
+            transform: translateZ(0);
+            will-change: transform;
+        }
+
+        .card.reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card:hover {
+            transform: translateY(-4px) translateZ(0);
+            box-shadow: var(--shadow-glow);
+            border-color: rgba(99, 102, 241, 0.6);
+        }
+
+        .card-header {
+            padding: var(--space-md) var(--space-md) var(--space-sm);
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-sm);
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: white;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .card-icon img {
+            width: 100%;
+            height: 100%;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+        }
+
+        .card-title {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .card-title h3 {
+            font-size: 1rem;
+            margin-bottom: var(--space-xs);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.3;
+        }
+
+        .card-title p {
+            font-size: 0.75rem;
+            color: var(--gray);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-badge {
+            background: var(--primary);
+            color: white;
+            font-size: 0.625rem;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .card-badge.free {
+            background: var(--secondary);
+        }
+
+        .card-badge.freemium {
+            background: var(--warning);
+        }
+
+        .card-content {
+            padding: 0 var(--space-md) var(--space-sm);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-content p {
+            font-size: 0.8125rem;
+            line-height: 1.4;
+            color: var(--gray-light);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: var(--space-sm);
+        }
+
+        .feature-icons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-xs);
+            min-height: 44px;
+            align-content: flex-start;
+        }
+
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: var(--radius-sm);
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: var(--primary);
+            position: relative;
+            cursor: help;
+            transition: all var(--transition-fast);
+            flex-shrink: 0;
+        }
+
+        .feature-icon:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .feature-icon:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            white-space: nowrap;
+            z-index: var(--z-tooltip);
+            pointer-events: none;
+        }
+
+        .card-footer {
+            padding: var(--space-sm) var(--space-md);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .card-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            transition: all var(--transition-fast);
+            padding: var(--space-sm);
+            border-radius: var(--radius-sm);
+            min-height: 44px;
+        }
+
+        .card-link:hover,
+        .card-link:focus {
+            color: var(--light);
+            background: var(--primary-light);
+            gap: var(--space-sm);
+        }
+
+        .price-indicator {
+            display: flex;
+            gap: var(--space-xs);
+            align-items: center;
+        }
+
+        .price-icon {
+            font-size: 0.875rem;
+        }
+
+        .price-icon.free {
+            color: var(--secondary);
+        }
+
+        .price-icon.freemium {
+            color: var(--warning);
+        }
+
+        .price-icon.paid {
+            color: var(--error);
+        }
+
+        /* ===== PAGINATION ===== */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: var(--space-2xl);
+            gap: var(--space-xs);
+            flex-wrap: wrap;
+        }
+
+        .pagination button {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            min-width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-size: 0.875rem;
+            padding: 0 var(--space-sm);
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .pagination button.active {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-info {
+            color: var(--gray);
+            font-size: 0.875rem;
+            margin: 0 var(--space-md);
+        }
+
+        /* ===== DATA MANAGEMENT ===== */
+        .data-management {
+            position: fixed;
+            bottom: var(--space-xl);
+            right: var(--space-xl);
+            z-index: var(--z-modal);
+        }
+
+        .data-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-xl);
+            transition: all var(--transition-normal);
+            /* GPU acceleration */
+            transform: translateZ(0);
+        }
+
+        .data-btn:hover,
+        .data-btn:focus {
+            background: var(--primary-dark);
+            transform: scale(1.1) translateZ(0);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* ===== MODAL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: var(--z-modal);
+            backdrop-filter: blur(5px);
+            /* Single backdrop-filter */
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--modal-bg);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-2xl);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: min(90vw, 800px);
+            max-height: 90vh;
+            animation: modalSlideIn var(--animation-modal);
+            /* GPU acceleration */
+            transform: translateZ(0);
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-20px) translateZ(0);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0) translateZ(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color var(--transition-fast);
+            padding: var(--space-xs);
+            border-radius: var(--radius-sm);
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-modal:hover,
+        .close-modal:focus {
+            color: var(--light);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: var(--space-lg);
+        }
+
+        .data-textarea {
+            width: 100%;
+            height: 400px;
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: var(--space-md);
+            color: var(--light);
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            resize: vertical;
+            outline: none;
+            transition: border-color var(--transition-fast);
+        }
+
+        .data-textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .data-textarea.error {
+            border-color: var(--error);
+            box-shadow: 0 0 0 3px var(--error-light);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: var(--space-sm);
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .modal-btn {
+            padding: var(--space-sm) var(--space-lg);
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all var(--transition-fast);
+            font-size: 0.875rem;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-btn.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .modal-btn.primary:hover,
+        .modal-btn.primary:focus {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .modal-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+        }
+
+        .modal-btn.secondary:hover,
+        .modal-btn.secondary:focus {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: rgba(15, 23, 42, 0.9);
+            padding: var(--space-2xl) 5% var(--space-md);
+            margin-top: var(--space-2xl);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: var(--space-2xl);
+            gap: var(--space-xl);
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-column h4 {
+            font-size: 1.125rem;
+            margin-bottom: var(--space-lg);
+            color: var(--primary);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: var(--space-sm);
+        }
+
+        .footer-column a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+            font-size: 0.875rem;
+            padding: var(--space-xs) 0;
+            display: block;
+        }
+
+        .footer-column a:hover,
+        .footer-column a:focus {
+            color: var(--light);
+        }
+
+        .copyright {
+            padding-top: var(--space-lg);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray);
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+        /* ===== UTILITY CLASSES ===== */
+        .text-center { text-align: center; }
+        .text-error { color: var(--error); }
+        .text-success { color: var(--secondary); }
+        .text-warning { color: var(--warning); }
+        
+        .mt-sm { margin-top: var(--space-sm); }
+        .mt-md { margin-top: var(--space-md); }
+        .mt-lg { margin-top: var(--space-lg); }
+        
+        .hidden { display: none; }
+        .visible { display: block; }
+
+        /* ===== LOADING STATES ===== */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: var(--space-xl);
+                position: static;
+            }
+            
+            .filter-options {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .filter-option {
+                flex: 1;
+                min-width: 150px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --space-xl: 24px;
+                --space-2xl: 32px;
+            }
+            
+            header {
+                flex-direction: column;
+                gap: var(--space-md);
+                padding: var(--space-md) 5%;
+            }
+            
+            .search-container {
+                width: 100%;
+            }
+            
+            nav ul {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: var(--space-md);
+            }
+            
+            .sort-options {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .modal-content {
+                margin: var(--space-md);
+                padding: var(--space-lg);
+                width: calc(100% - var(--space-md) * 2);
+            }
+            
+            .data-management {
+                bottom: var(--space-md);
+                right: var(--space-md);
+            }
+            
+            .data-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.25rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-content {
+                flex-direction: column;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+            }
+            
+            .modal-btn {
+                width: 100%;
+            }
+        }
+
+        /* ===== TOAST NOTIFICATIONS ===== */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--secondary);
+            color: white;
+            padding: var(--space-md) var(--space-lg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            z-index: var(--z-tooltip);
+            transform: translateX(150%);
+            transition: transform var(--transition-normal);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            background: var(--error);
+        }
+
+        .toast.warning {
+            background: var(--warning);
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header -->
+    <header role="banner">
+        <a href="#" class="logo" aria-label="AI Hub Home">
+            <i class="fas fa-robot" aria-hidden="true"></i>
+            AI<span>Hub</span>
+        </a>
+        <div class="search-container">
+            <i class="fas fa-search" aria-hidden="true"></i>
+            <input 
+                type="text" 
+                placeholder="Search AI tools..." 
+                aria-label="Search AI tools"
+                id="search-input"
+            >
+        </div>
+        <nav role="navigation" aria-label="Main navigation">
+            <ul>
+                <li><a href="#" aria-current="page">Home</a></li>
+                <li><a href="#">Categories</a></li>
+                <li><a href="#">New</a></li>
+                <li><a href="#">Top Rated</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <div class="container">
+            <!-- Sidebar Filters -->
+            <aside class="sidebar" role="complementary" aria-label="Filters">
+                <h3><i class="fas fa-filter" aria-hidden="true"></i> Filters</h3>
+                
+                <!-- Categories Filter -->
+                <section class="filter-section" aria-labelledby="categories-heading">
+                    <div class="filter-header" tabindex="0" role="button" aria-expanded="true" aria-controls="categories-content">
+                        <h4 id="categories-heading"><i class="fas fa-tags" aria-hidden="true"></i> Categories</h4>
+                        <i class="fas fa-chevron-down toggle-icon" aria-hidden="true"></i>
+                    </div>
+                    <div class="filter-content" id="categories-content">
+                        <div class="filter-options" role="listbox" aria-labelledby="categories-heading">
+                            <!-- Options will be populated dynamically -->
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Pricing Filter -->
+                <section class="filter-section" aria-labelledby="pricing-heading">
+                    <div class="filter-header" tabindex="0" role="button" aria-expanded="true" aria-controls="pricing-content">
+                        <h4 id="pricing-heading"><i class="fas fa-dollar-sign" aria-hidden="true"></i> Pricing</h4>
+                        <i class="fas fa-chevron-down toggle-icon" aria-hidden="true"></i>
+                    </div>
+                    <div class="filter-content" id="pricing-content">
+                        <div class="filter-options" role="listbox" aria-labelledby="pricing-heading">
+                            <!-- Options will be populated dynamically -->
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Rating Filter -->
+                <section class="filter-section" aria-labelledby="rating-heading">
+                    <div class="filter-header" tabindex="0" role="button" aria-expanded="true" aria-controls="rating-content">
+                        <h4 id="rating-heading"><i class="fas fa-star" aria-hidden="true"></i> Rating</h4>
+                        <i class="fas fa-chevron-down toggle-icon" aria-hidden="true"></i>
+                    </div>
+                    <div class="filter-content" id="rating-content">
+                        <div class="filter-options" role="listbox" aria-labelledby="rating-heading">
+                            <!-- Options will be populated dynamically -->
+                        </div>
+                    </div>
+                </section>
+            </aside>
+
+            <!-- Main Content Area -->
+            <div class="main-content">
+                <div class="section-header">
+                    <h2 class="section-title">AI Tools Directory</h2>
+                    <div class="sort-options">
+                        <span>Sort by:</span>
+                        <select id="sort-select" aria-label="Sort tools by">
+                            <option value="popular">Most Popular</option>
+                            <option value="newest">Newest</option>
+                            <option value="rating">Highest Rated</option>
+                            <option value="name">Name (A-Z)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div class="loading-skeleton hidden" id="loading-skeleton">
+                    <div class="skeleton-card"></div>
+                    <div class="skeleton-card"></div>
+                    <div class="skeleton-card"></div>
+                    <div class="skeleton-card"></div>
+                </div>
+
+                <!-- Cards Grid -->
+                <div class="cards-grid" id="cards-container" role="list" aria-label="AI tools list">
+                    <!-- Cards will be dynamically inserted here -->
+                </div>
+
+                <!-- Empty State -->
+                <div class="text-center hidden" id="empty-state">
+                    <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; color: var(--gray);"></i>
+                    <h3>No tools found</h3>
+                    <p>Try adjusting your filters or search terms</p>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination hidden" id="pagination" role="navigation" aria-label="Pagination">
+                    <!-- Pagination will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Data Management Button -->
+    <div class="data-management">
+        <button class="data-btn" id="data-management-btn" aria-label="Manage data">
+            <i class="fas fa-database" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <!-- Data Management Modal -->
+    <div class="modal" id="data-modal" role="dialog" aria-labelledby="modal-title" aria-modal="true" aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">AI Tools Data Management</h2>
+                <button class="close-modal" id="close-modal" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <textarea 
+                    class="data-textarea" 
+                    id="data-textarea" 
+                    placeholder="Paste your AI tools data here..."
+                    aria-label="AI tools data in JSON format"
+                ></textarea>
+                <div class="text-error hidden" id="error-message"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn secondary" id="export-btn">
+                    <i class="fas fa-download" aria-hidden="true"></i>
+                    Export Data
+                </button>
+                <button class="modal-btn secondary" id="import-btn">
+                    <i class="fas fa-upload" aria-hidden="true"></i>
+                    Import Data
+                </button>
+                <button class="modal-btn primary" id="apply-btn">
+                    <i class="fas fa-check" aria-hidden="true"></i>
+                    Apply Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast hidden" id="toast"></div>
+
+    <!-- Footer -->
+    <footer role="contentinfo">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h4>AI Hub</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Our Mission</a></li>
+                    <li><a href="#">Team</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">AI News</a></li>
+                    <li><a href="#">Tutorials</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Community</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Submit a Tool</a></li>
+                    <li><a href="#">Report Issue</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Connect</h4>
+                <ul>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">LinkedIn</a></li>
+                    <li><a href="#">GitHub</a></li>
+                    <li><a href="#">Discord</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2023 AI Hub. All rights reserved. | The ultimate directory of AI tools and services.
+        </div>
+    </footer>
+
+    <script>
+        // ===== CONFIGURATION & CONSTANTS =====
+        const CONFIG = {
+            toolsPerPage: 30,
+            debounceDelay: 300,
+            maxRating: 5.0,
+            supportedProtocols: ['https:', 'http:'],
+            validIconPrefixes: ['fas', 'fab', 'far']
+        };
+
+        // ===== FEATURE ICONS MAPPING =====
+        const FEATURE_ICONS = {
+            // Main Categories
+            'AI Agent': 'fas fa-cogs',
+            'AI Chat': 'fas fa-comments',
+            'AI Writing': 'fas fa-pen-fancy',
+            'Image-Gen': 'fas fa-palette',
+            'Video-Gen': 'fas fa-film',
+            'Audio-Gen': 'fas fa-music',
+            'AI Code': 'fas fa-code',
+            'AI Data': 'fas fa-chart-bar',
+            'AI Search': 'fas fa-search',
+            'AI PPT': 'fas fa-presentation-screen',
+            'AI Browser': 'fas fa-compass',
+            'AI Whiteboard': 'fas fa-brain',
+            'AI Detection': 'fas fa-search-plus',
+            'AI Research': 'fas fa-graduation-cap',
+            'AI Platform': 'fas fa-server',
+            'AI Prompt': 'fas fa-lightbulb',
+            'AI Recruitment': 'fas fa-user-tie',
+            'AI Legal': 'fas fa-gavel',
+            
+            // Additional Features
+            'Vision': 'fas fa-eye',
+            'Inpaint': 'fas fa-paint-brush',
+            'Research': 'fas fa-book',
+            'Conversational': 'fas fa-comment-alt',
+            'Autonomous': 'fas fa-robot',
+            'No-Code': 'fas fa-magic',
+            'Open-Source': 'fab fa-github',
+            'Multilingual': 'fas fa-language',
+            'Real-time': 'fas fa-bolt',
+            'API': 'fas fa-plug'
+        };
+
+        // ===== VALIDATION SCHEMAS =====
+        const VALIDATION = {
+            toolSchema: {
+                id: 'number',
+                name: 'string',
+                description: 'string',
+                rating: 'number',
+                tags: 'array',
+                url: 'string',
+                icon: 'string',
+                price_model: 'string'
+            },
+            
+            validateTool(tool) {
+                // Check required fields
+                for (const [key, type] of Object.entries(this.toolSchema)) {
+                    if (!tool.hasOwnProperty(key)) {
+                        throw new Error(`Missing required field: ${key}`);
+                    }
+                    
+                    const actualType = Array.isArray(tool[key]) ? 'array' : typeof tool[key];
+                    if (actualType !== type) {
+                        throw new Error(`Invalid type for ${key}: expected ${type}, got ${actualType}`);
+                    }
+                }
+                
+                // Additional validations
+                if (tool.rating < 0 || tool.rating > CONFIG.maxRating) {
+                    throw new Error(`Rating must be between 0 and ${CONFIG.maxRating}`);
+                }
+                
+                if (!Array.isArray(tool.tags) || tool.tags.length === 0) {
+                    throw new Error('Tags must be a non-empty array');
+                }
+                
+                if (!this.isValidUrl(tool.url)) {
+                    throw new Error('Invalid URL format');
+                }
+                
+                if (!this.isValidIcon(tool.icon)) {
+                    throw new Error('Invalid icon format');
+                }
+                
+                // Validate tags against feature icons
+                tool.tags.forEach(tag => {
+                    if (!FEATURE_ICONS[tag] && !this.isValidIcon(tag)) {
+                        console.warn(`No icon mapping for tag: ${tag}`);
+                    }
+                });
+                
+                return true;
+            },
+            
+            isValidUrl(url) {
+                try {
+                    const urlObj = new URL(url);
+                    return CONFIG.supportedProtocols.includes(urlObj.protocol);
+                } catch {
+                    return false;
+                }
+            },
+            
+            isValidIcon(icon) {
+                return CONFIG.validIconPrefixes.some(prefix => 
+                    icon.startsWith(`${prefix} fa-`)
+                );
+            },
+            
+            sanitizeText(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            },
+            
+            sanitizeSearchTerm(term) {
+                return term.replace(/[<>]/g, '').trim();
+            }
+        };
+
+        // ===== AI TOOLS DATA =====
+        let aiTools = [
+            {
+                id: 1,
+                name: "AutoGPT",
+                description: "Autonomous AI agent that can perform tasks with minimal human intervention.",
+                rating: 4.7,
+                tags: ["AI Agent", "Autonomous", "AI Chat", "Research"],
+                url: "https://github.com/Significant-Gravitas/AutoGPT",
+                icon: "fas fa-cogs",
+                price_model: "100% Free (no subscription/plan)"
+            },
+            {
+                id: 2,
+                name: "AgentGPT",
+                description: "Assemble, configure, and deploy autonomous AI Agents in your browser.",
+                rating: 4.5,
+                tags: ["AI Agent", "AI Browser", "Autonomous", "No-Code"],
+                url: "https://agentgpt.reworkd.ai",
+                icon: "fas fa-brain",
+                price_model: "100% Free (no subscription/plan)"
+            },
+            {
+                id: 3,
+                name: "ChatGPT",
+                description: "Advanced conversational AI for text generation and problem solving.",
+                rating: 4.8,
+                tags: ["AI Chat", "AI Writing", "Research", "Conversational", "Multilingual"],
+                url: "https://chat.openai.com",
+                icon: "fas fa-comment-dots",
+                price_model: "Paid (Has Free Plan)"
+            },
+            {
+                id: 4,
+                name: "Claude",
+                description: "AI assistant focused on helpful, honest, and harmless conversations.",
+                rating: 4.6,
+                tags: ["AI Chat", "AI Writing", "Research", "Conversational"],
+                url: "https://claude.ai",
+                icon: "fas fa-robot",
+                price_model: "Paid (Has Free Plan)"
+            },
+            {
+                id: 5,
+                name: "Midjourney",
+                description: "AI-powered tool for creating unique images from text prompts.",
+                rating: 4.6,
+                tags: ["Image-Gen", "AI Art", "Creative"],
+                url: "https://www.midjourney.com",
+                icon: "fas fa-paint-brush",
+                price_model: "Paid (No Free Plan)"
+            },
+            {
+                id: 6,
+                name: "DALL-E 2",
+                description: "Create realistic images and art from a description in natural language.",
+                rating: 4.7,
+                tags: ["Image-Gen", "AI Art", "Design", "Vision"],
+                url: "https://openai.com/dall-e-2",
+                icon: "fas fa-palette",
+                price_model: "Paid (Has Free Plan)"
+            },
+            {
+                id: 7,
+                name: "Runway ML",
+                description: "Advanced creative tools for video editing and generation with AI.",
+                rating: 4.4,
+                tags: ["Video-Gen", "Image-Gen", "Inpaint", "Creative", "AI Editing"],
+                url: "https://runwayml.com",
+                icon: "fas fa-film",
+                price_model: "Paid (Has Free Plan)"
+            },
+            {
+                id: 8,
+                name: "GitHub Copilot",
+                description: "AI pair programmer that helps you write better code faster.",
+                rating: 4.5,
+                tags: ["AI Code", "Programming", "Development", "Real-time"],
+                url: "https://github.com/features/copilot",
+                icon: "fas fa-code",
+                price_model: "Paid (No Free Plan)"
+            },
+            {
+                id: 9,
+                name: "Perplexity AI",
+                description: "AI-powered search engine with conversational responses.",
+                rating: 4.6,
+                tags: ["AI Search", "AI Chat", "Research", "Conversational", "Real-time"],
+                url: "https://www.perplexity.ai",
+                icon: "fas fa-search",
+                price_model: "100% Free (no subscription/plan)"
+            },
+            {
+                id: 10,
+                name: "Hugging Face",
+                description: "Platform with thousands of pre-trained AI models for various tasks.",
+                rating: 4.6,
+                tags: ["AI Platform", "AI Code", "AI Research", "Open-Source", "API"],
+                url: "https://huggingface.co",
+                icon: "fab fa-github",
+                price_model: "100% Free (no subscription/plan)"
+            }
+        ];
+
+        // ===== APPLICATION STATE =====
+        const state = {
+            currentPage: 1,
+            filteredTools: [],
+            activeFilters: {
+                category: 'all',
+                price: 'all',
+                rating: 'all'
+            },
+            sortBy: 'popular',
+            searchTerm: '',
+            isLoading: false,
+            isModalOpen: false
+        };
+
+        // ===== DOM ELEMENTS =====
+        const elements = {
+            // Containers
+            cardsContainer: document.getElementById('cards-container'),
+            paginationContainer: document.getElementById('pagination'),
+            loadingSkeleton: document.getElementById('loading-skeleton'),
+            emptyState: document.getElementById('empty-state'),
+            toast: document.getElementById('toast'),
+            
+            // Filters
+            filterOptions: document.querySelectorAll('.filter-option'),
+            filterHeaders: document.querySelectorAll('.filter-header'),
+            
+            // Search & Sort
+            searchInput: document.getElementById('search-input'),
+            sortSelect: document.getElementById('sort-select'),
+            
+            // Modal
+            dataModal: document.getElementById('data-modal'),
+            dataTextarea: document.getElementById('data-textarea'),
+            dataManagementBtn: document.getElementById('data-management-btn'),
+            closeModal: document.getElementById('close-modal'),
+            exportBtn: document.getElementById('export-btn'),
+            importBtn: document.getElementById('import-btn'),
+            applyBtn: document.getElementById('apply-btn'),
+            errorMessage: document.getElementById('error-message')
+        };
+
+        // ===== UTILITY FUNCTIONS =====
+        const utils = {
+            // Performance
+            debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            },
+            
+            // DOM
+            createElement(tag, classes = '', attributes = {}) {
+                const element = document.createElement(tag);
+                if (classes) element.className = classes;
+                Object.entries(attributes).forEach(([key, value]) => {
+                    element.setAttribute(key, value);
+                });
+                return element;
+            },
+            
+            showElement(element) {
+                element.classList.remove('hidden');
+            },
+            
+            hideElement(element) {
+                element.classList.add('hidden');
+            },
+            
+            // Data
+            getPriceType(priceModel) {
+                if (priceModel.includes('100% Free')) return 'free';
+                if (priceModel.includes('Has Free Plan')) return 'freemium';
+                return 'paid';
+            },
+            
+            getPriceIcon(priceModel) {
+                if (priceModel.includes('100% Free')) return 'fas fa-gift';
+                if (priceModel.includes('Has Free Plan')) return 'fas fa-crown';
+                return 'fas fa-dollar-sign';
+            },
+            
+            // Validation
+            validateToolsData(data) {
+                if (!Array.isArray(data)) {
+                    throw new Error('Data must be an array');
+                }
+                
+                const ids = new Set();
+                
+                data.forEach((tool, index) => {
+                    try {
+                        VALIDATION.validateTool(tool);
+                        
+                        // Check for duplicate IDs
+                        if (ids.has(tool.id)) {
+                            throw new Error(`Duplicate ID found: ${tool.id}`);
+                        }
+                        ids.add(tool.id);
+                        
+                    } catch (error) {
+                        throw new Error(`Tool at index ${index} is invalid: ${error.message}`);
+                    }
+                });
+                
+                return true;
+            },
+
+            // Toast notifications
+            showToast(message, type = 'success') {
+                const toast = elements.toast;
+                toast.textContent = message;
+                toast.className = `toast ${type} show`;
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+        };
+
+        // ===== CORE APPLICATION =====
+        const app = {
+            // Cleanup tracking
+            cleanupCallbacks: [],
+            observers: [],
+            
+            init() {
+                try {
+                    this.setupEventListeners();
+                    this.initializeFilters();
+                    this.applyFilters();
+                    this.setupCollapsibleFilters();
+                    this.initializeRevealAnimation();
+                    
+                    console.log('AI Tools Directory initialized successfully');
+                } catch (error) {
+                    console.error('Failed to initialize application:', error);
+                    this.showError('Failed to initialize application. Please refresh the page.', error);
+                }
+            },
+
+            cleanup() {
+                // Clean up all event listeners and observers
+                this.cleanupCallbacks.forEach(callback => callback());
+                this.observers.forEach(observer => observer.disconnect());
+                this.cleanupCallbacks = [];
+                this.observers = [];
+            },
+            
+            setupEventListeners() {
+                // Search with debouncing
+                const searchHandler = utils.debounce(() => {
+                    state.searchTerm = VALIDATION.sanitizeSearchTerm(
+                        elements.searchInput.value.toLowerCase()
+                    );
+                    this.applyFilters();
+                }, CONFIG.debounceDelay);
+                
+                elements.searchInput.addEventListener('input', searchHandler);
+                this.cleanupCallbacks.push(() => {
+                    elements.searchInput.removeEventListener('input', searchHandler);
+                });
+                
+                // Sort
+                const sortHandler = () => {
+                    state.sortBy = elements.sortSelect.value;
+                    this.applyFilters();
+                };
+                elements.sortSelect.addEventListener('change', sortHandler);
+                this.cleanupCallbacks.push(() => {
+                    elements.sortSelect.removeEventListener('change', sortHandler);
+                });
+                
+                // Modal
+                elements.dataManagementBtn.addEventListener('click', () => this.openDataModal());
+                elements.closeModal.addEventListener('click', () => this.closeDataModal());
+                elements.exportBtn.addEventListener('click', () => this.exportData());
+                elements.importBtn.addEventListener('click', () => this.importData());
+                elements.applyBtn.addEventListener('click', () => this.applyDataChanges());
+                
+                // Close modal on outside click
+                const modalClickHandler = (e) => {
+                    if (e.target === elements.dataModal) this.closeDataModal();
+                };
+                elements.dataModal.addEventListener('click', modalClickHandler);
+                this.cleanupCallbacks.push(() => {
+                    elements.dataModal.removeEventListener('click', modalClickHandler);
+                });
+                
+                // ESC key handler for modal
+                const escHandler = (e) => {
+                    if (e.key === 'Escape' && state.isModalOpen) {
+                        this.closeDataModal();
+                    }
+                };
+                document.addEventListener('keydown', escHandler);
+                this.cleanupCallbacks.push(() => {
+                    document.removeEventListener('keydown', escHandler);
+                });
+            },
+            
+            initializeFilters() {
+                try {
+                    // Safely get filter containers
+                    const categoriesContainer = document.querySelector('.filter-options[aria-labelledby="categories-heading"]');
+                    const pricingContainer = document.querySelector('.filter-options[aria-labelledby="pricing-heading"]');
+                    const ratingContainer = document.querySelector('.filter-options[aria-labelledby="rating-heading"]');
+                    
+                    if (!categoriesContainer || !pricingContainer || !ratingContainer) {
+                        throw new Error('Filter containers not found');
+                    }
+                    
+                    // Categories
+                    const categories = [...new Set(aiTools.flatMap(tool => tool.tags))].sort();
+                    categoriesContainer.innerHTML = this.createFilterOptions('category', categories, 'All AI Tools');
+                    
+                    // Pricing
+                    const priceOptions = ['free', 'freemium', 'paid'];
+                    const priceLabels = {
+                        free: '100% Free',
+                        freemium: 'Free Plan Available', 
+                        paid: 'Paid Only'
+                    };
+                    pricingContainer.innerHTML = this.createFilterOptions('price', priceOptions, 'All Prices', priceLabels);
+                    
+                    // Rating
+                    const ratingOptions = ['4', '3'];
+                    const ratingLabels = {
+                        '4': '4+ Stars',
+                        '3': '3+ Stars'
+                    };
+                    ratingContainer.innerHTML = this.createFilterOptions('rating', ratingOptions, 'All Ratings', ratingLabels);
+                    
+                    // Filter option click handlers
+                    this.setupFilterHandlers();
+                    
+                } catch (error) {
+                    console.error('Failed to initialize filters:', error);
+                    this.showError('Failed to initialize filters. Some features may not work.', error);
+                }
+            },
+            
+            createFilterOptions(type, options, allLabel, labels = {}) {
+                const counts = this.calculateFilterCounts(type, options);
+                
+                return `
+                    <div class="filter-option active" data-${type}="all" role="option" aria-selected="true">
+                        <div class="checkmark"></div>
+                        <span>${allLabel}</span>
+                        <div class="count-badge">${counts.all}</div>
+                    </div>
+                    ${options.map(option => {
+                        const label = labels[option] || option;
+                        const count = counts[option] || 0;
+                        return `
+                            <div class="filter-option" data-${type}="${option}" role="option" aria-selected="false">
+                                <div class="checkmark"></div>
+                                <span>${label}</span>
+                                <div class="count-badge">${count}</div>
+                            </div>
+                        `;
+                    }).join('')}
+                `;
+            },
+            
+            calculateFilterCounts(type, options) {
+                const counts = { all: aiTools.length };
+                
+                options.forEach(option => {
+                    if (type === 'category') {
+                        counts[option] = aiTools.filter(tool => tool.tags.includes(option)).length;
+                    } else if (type === 'price') {
+                        counts[option] = aiTools.filter(tool => 
+                            utils.getPriceType(tool.price_model) === option
+                        ).length;
+                    } else if (type === 'rating') {
+                        const minRating = parseFloat(option);
+                        counts[option] = aiTools.filter(tool => tool.rating >= minRating).length;
+                    }
+                });
+                
+                return counts;
+            },
+            
+            setupFilterHandlers() {
+                document.querySelectorAll('.filter-option').forEach(option => {
+                    const clickHandler = (e) => {
+                        e.stopPropagation();
+                        this.handleFilterClick(option);
+                    };
+                    
+                    option.addEventListener('click', clickHandler);
+                    
+                    // Keyboard support
+                    const keyHandler = (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            this.handleFilterClick(option);
+                        }
+                    };
+                    
+                    option.addEventListener('keydown', keyHandler);
+                    
+                    // Store for cleanup
+                    this.cleanupCallbacks.push(() => {
+                        option.removeEventListener('click', clickHandler);
+                        option.removeEventListener('keydown', keyHandler);
+                    });
+                });
+            },
+            
+            handleFilterClick(option) {
+                const parent = option.closest('.filter-options');
+                if (!parent) return;
+                
+                const filterType = option.hasAttribute('data-category') ? 'category' :
+                                 option.hasAttribute('data-price') ? 'price' : 'rating';
+                
+                // Update active state
+                parent.querySelectorAll('.filter-option').forEach(opt => {
+                    opt.classList.remove('active');
+                    opt.setAttribute('aria-selected', 'false');
+                });
+                
+                option.classList.add('active');
+                option.setAttribute('aria-selected', 'true');
+                
+                // Update state
+                state.activeFilters[filterType] = option.getAttribute(`data-${filterType}`);
+                state.currentPage = 1;
+                
+                this.applyFilters();
+            },
+            
+            applyFilters() {
+                try {
+                    state.isLoading = true;
+                    this.showLoadingState();
+                    
+                    // Validate filteredTools exists and is an array
+                    if (!Array.isArray(state.filteredTools)) {
+                        state.filteredTools = [...aiTools];
+                    }
+                    
+                    let filtered = [...aiTools];
+                    
+                    // Category filter
+                    if (state.activeFilters.category !== 'all') {
+                        filtered = filtered.filter(tool => 
+                            tool.tags.includes(state.activeFilters.category)
+                        );
+                    }
+                    
+                    // Price filter
+                    if (state.activeFilters.price !== 'all') {
+                        filtered = filtered.filter(tool => 
+                            utils.getPriceType(tool.price_model) === state.activeFilters.price
+                        );
+                    }
+                    
+                    // Rating filter
+                    if (state.activeFilters.rating !== 'all') {
+                        const minRating = parseFloat(state.activeFilters.rating);
+                        filtered = filtered.filter(tool => tool.rating >= minRating);
+                    }
+                    
+                    // Search filter
+                    if (state.searchTerm) {
+                        const searchTerm = state.searchTerm.toLowerCase();
+                        filtered = filtered.filter(tool => 
+                            tool.name.toLowerCase().includes(searchTerm) ||
+                            tool.description.toLowerCase().includes(searchTerm) ||
+                            tool.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
+                            tool.price_model.toLowerCase().includes(searchTerm)
+                        );
+                    }
+                    
+                    state.filteredTools = this.applySorting(filtered);
+                    this.renderTools();
+                    
+                } catch (error) {
+                    console.error('Error applying filters:', error);
+                    this.showError('Error applying filters. Please try again.', error);
+                } finally {
+                    state.isLoading = false;
+                    this.hideLoadingState();
+                }
+            },
+            
+            applySorting(tools) {
+                // Validate tools array
+                if (!Array.isArray(tools)) {
+                    console.warn('Invalid tools array provided to applySorting');
+                    return [];
+                }
+                
+                try {
+                    switch (state.sortBy) {
+                        case 'newest':
+                            return tools.sort((a, b) => b.id - a.id);
+                        case 'rating':
+                            return tools.sort((a, b) => b.rating - a.rating);
+                        case 'name':
+                            return tools.sort((a, b) => a.name.localeCompare(b.name));
+                        case 'popular':
+                        default:
+                            return tools.sort((a, b) => b.rating - a.rating);
+                    }
+                } catch (error) {
+                    console.error('Error sorting tools:', error);
+                    return tools;
+                }
+            },
+            
+            renderTools() {
+                try {
+                    // Validate state
+                    if (!Array.isArray(state.filteredTools)) {
+                        state.filteredTools = [];
+                    }
+                    
+                    const startIndex = (state.currentPage - 1) * CONFIG.toolsPerPage;
+                    const endIndex = Math.min(startIndex + CONFIG.toolsPerPage, state.filteredTools.length);
+                    
+                    // Handle empty array bounds
+                    const toolsToShow = state.filteredTools.length > 0 
+                        ? state.filteredTools.slice(startIndex, endIndex)
+                        : [];
+                    
+                    const totalPages = Math.max(1, Math.ceil(state.filteredTools.length / CONFIG.toolsPerPage));
+                    
+                    // Validate current page
+                    if (state.currentPage > totalPages) {
+                        state.currentPage = Math.max(1, totalPages);
+                    }
+                    
+                    // Show empty state if no results
+                    if (state.filteredTools.length === 0) {
+                        utils.showElement(elements.emptyState);
+                        utils.hideElement(elements.cardsContainer);
+                        utils.hideElement(elements.paginationContainer);
+                        return;
+                    }
+                    
+                    utils.hideElement(elements.emptyState);
+                    utils.showElement(elements.cardsContainer);
+                    
+                    this.renderCards(toolsToShow);
+                    this.renderPagination(totalPages);
+                    
+                } catch (error) {
+                    console.error('Error rendering tools:', error);
+                    this.showError('Error displaying tools. Please refresh the page.', error);
+                }
+            },
+            
+            renderCards(tools) {
+                try {
+                    elements.cardsContainer.innerHTML = '';
+                    
+                    if (!Array.isArray(tools) || tools.length === 0) {
+                        return;
+                    }
+                    
+                    tools.forEach(tool => {
+                        try {
+                            const card = this.createCard(tool);
+                            elements.cardsContainer.appendChild(card);
+                        } catch (cardError) {
+                            console.error('Error creating card for tool:', tool.name, cardError);
+                            // Continue with other cards
+                        }
+                    });
+                    
+                    // Trigger reveal animation
+                    setTimeout(() => {
+                        document.querySelectorAll('.card').forEach(card => {
+                            card.classList.add('reveal');
+                        });
+                    }, 100);
+                    
+                } catch (error) {
+                    console.error('Error rendering cards:', error);
+                    throw new Error('Failed to render tool cards');
+                }
+            },
+            
+            createCard(tool) {
+                // Validate tool data
+                if (!tool || typeof tool !== 'object') {
+                    throw new Error('Invalid tool data');
+                }
+                
+                const priceType = utils.getPriceType(tool.price_model);
+                const priceIcon = utils.getPriceIcon(tool.price_model);
+                const sanitizedDescription = VALIDATION.sanitizeText(tool.description);
+                
+                const card = utils.createElement('article', 'card', {
+                    'data-tags': Array.isArray(tool.tags) ? tool.tags.join(',') : '',
+                    'data-price': priceType,
+                    'data-rating': Math.floor(tool.rating || 0).toString(),
+                    'role': 'listitem'
+                });
+                
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">
+                            <i class="${tool.icon || 'fas fa-question'}"></i>
+                        </div>
+                        <div class="card-title">
+                            <h3>${VALIDATION.sanitizeText(tool.name || 'Unknown Tool')}</h3>
+                            <p>${Array.isArray(tool.tags) && tool.tags.length > 0 ? tool.tags[0] : 'Uncategorized'}</p>
+                        </div>
+                        ${priceType === 'free' ? '<div class="card-badge free">FREE</div>' : ''}
+                        ${priceType === 'freemium' ? '<div class="card-badge freemium">FREEMIUM</div>' : ''}
+                    </div>
+                    <div class="card-content">
+                        <p>${sanitizedDescription}</p>
+                        <div class="feature-icons">
+                            ${Array.isArray(tool.tags) ? tool.tags.map(tag => `
+                                <div class="feature-icon" data-tooltip="${VALIDATION.sanitizeText(tag)}" aria-label="${VALIDATION.sanitizeText(tag)}">
+                                    <i class="${FEATURE_ICONS[tag] || 'fas fa-star'}"></i>
+                                </div>
+                            `).join('') : ''}
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="${tool.url || '#'}" target="_blank" rel="noopener noreferrer" class="card-link">
+                            Visit Site <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                        </a>
+                        <div class="price-indicator">
+                            <i class="price-icon ${priceType} ${priceIcon}" aria-label="${tool.price_model || 'Unknown pricing'}"></i>
+                        </div>
+                    </div>
+                `;
+                
+                return card;
+            },
+            
+            renderPagination(totalPages) {
+                if (totalPages <= 1) {
+                    utils.hideElement(elements.paginationContainer);
+                    return;
+                }
+                
+                utils.showElement(elements.paginationContainer);
+                
+                let paginationHTML = '';
+                const current = state.currentPage;
+                const showFirstLast = totalPages > 5;
+                
+                // First page button
+                if (showFirstLast && current > 1) {
+                    paginationHTML += `<button onclick="app.changePage(1)" aria-label="First page">«</button>`;
+                }
+                
+                // Previous button
+                if (current > 1) {
+                    paginationHTML += `<button onclick="app.changePage(${current - 1})" aria-label="Previous page">‹</button>`;
+                }
+                
+                // Page numbers
+                for (let i = 1; i <= totalPages; i++) {
+                    if (i === 1 || i === totalPages || (i >= current - 1 && i <= current + 1)) {
+                        paginationHTML += `<button class="${i === current ? 'active' : ''}" onclick="app.changePage(${i})" aria-label="Page ${i}" ${i === current ? 'aria-current="page"' : ''}>${i}</button>`;
+                    } else if (i === current - 2 || i === current + 2) {
+                        paginationHTML += `<button disabled aria-hidden="true">...</button>`;
+                    }
+                }
+                
+                // Next button
+                if (current < totalPages) {
+                    paginationHTML += `<button onclick="app.changePage(${current + 1})" aria-label="Next page">›</button>`;
+                }
+                
+                // Last page button
+                if (showFirstLast && current < totalPages) {
+                    paginationHTML += `<button onclick="app.changePage(${totalPages})" aria-label="Last page">»</button>`;
+                }
+                
+                // Page info
+                paginationHTML += `<div class="pagination-info">Page ${current} of ${totalPages}</div>`;
+                
+                elements.paginationContainer.innerHTML = paginationHTML;
+            },
+            
+            changePage(page) {
+                const totalPages = Math.ceil(state.filteredTools.length / CONFIG.toolsPerPage);
+                
+                if (page < 1 || page > totalPages || !Number.isInteger(page)) {
+                    console.warn('Invalid page number:', page);
+                    return;
+                }
+                
+                state.currentPage = page;
+                this.renderTools();
+                
+                // Scroll to top smoothly
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                // Focus management for accessibility
+                elements.cardsContainer.focus({ preventScroll: true });
+            },
+            
+            setupCollapsibleFilters() {
+                elements.filterHeaders.forEach(header => {
+                    const clickHandler = () => {
+                        const section = header.parentElement;
+                        const isExpanded = section.classList.contains('collapsed');
+                        
+                        section.classList.toggle('collapsed');
+                        header.setAttribute('aria-expanded', !isExpanded);
+                    };
+                    
+                    header.addEventListener('click', clickHandler);
+                    
+                    // Keyboard support
+                    const keyHandler = (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            header.click();
+                        }
+                    };
+                    
+                    header.addEventListener('keydown', keyHandler);
+                    
+                    this.cleanupCallbacks.push(() => {
+                        header.removeEventListener('click', clickHandler);
+                        header.removeEventListener('keydown', keyHandler);
+                    });
+                });
+            },
+            
+            initializeRevealAnimation() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('reveal');
+                            // Unobserve after revealing
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { 
+                    threshold: 0.1,
+                    rootMargin: '50px'
+                });
+                
+                this.observers.push(observer);
+                
+                // Observe cards after they are rendered
+                const observeCards = () => {
+                    document.querySelectorAll('.card:not(.reveal)').forEach(card => {
+                        observer.observe(card);
+                    });
+                };
+                
+                // Initial observation
+                setTimeout(observeCards, 500);
+            },
+            
+            showLoadingState() {
+                utils.showElement(elements.loadingSkeleton);
+                utils.hideElement(elements.cardsContainer);
+            },
+            
+            hideLoadingState() {
+                utils.hideElement(elements.loadingSkeleton);
+                utils.showElement(elements.cardsContainer);
+            },
+            
+            showError(message, error = null) {
+                console.error('Application Error:', message, error);
+                utils.showToast(message, 'error');
+            },
+            
+            showSuccess(message) {
+                utils.showToast(message, 'success');
+            },
+            
+            // Data Management
+            openDataModal() {
+                if (state.isModalOpen) return;
+                
+                try {
+                    state.isModalOpen = true;
+                    document.body.classList.add('modal-open');
+                    elements.dataTextarea.value = JSON.stringify(aiTools, null, 2);
+                    elements.dataTextarea.classList.remove('error');
+                    utils.hideElement(elements.errorMessage);
+                    elements.dataModal.classList.add('show');
+                    elements.dataModal.setAttribute('aria-hidden', 'false');
+                    
+                    // Focus management - trap focus in modal
+                    const focusableElements = elements.dataModal.querySelectorAll(
+                        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                    );
+                    const firstFocusable = focusableElements[0];
+                    const lastFocusable = focusableElements[focusableElements.length - 1];
+                    
+                    if (firstFocusable) firstFocusable.focus();
+                    
+                    // Focus trap
+                    const focusTrap = (e) => {
+                        if (e.key === 'Tab') {
+                            if (e.shiftKey) {
+                                if (document.activeElement === firstFocusable) {
+                                    e.preventDefault();
+                                    lastFocusable.focus();
+                                }
+                            } else {
+                                if (document.activeElement === lastFocusable) {
+                                    e.preventDefault();
+                                    firstFocusable.focus();
+                                }
+                            }
+                        }
+                    };
+                    
+                    elements.dataModal.addEventListener('keydown', focusTrap);
+                    this.cleanupCallbacks.push(() => {
+                        elements.dataModal.removeEventListener('keydown', focusTrap);
+                    });
+                    
+                } catch (error) {
+                    this.showError('Failed to open data modal: ' + error.message, error);
+                }
+            },
+            
+            closeDataModal() {
+                state.isModalOpen = false;
+                document.body.classList.remove('modal-open');
+                elements.dataModal.classList.remove('show');
+                elements.dataModal.setAttribute('aria-hidden', 'true');
+                elements.dataTextarea.classList.remove('error');
+                utils.hideElement(elements.errorMessage);
+                
+                // Return focus to data management button
+                elements.dataManagementBtn.focus();
+            },
+            
+            exportData() {
+                try {
+                    const dataStr = JSON.stringify(aiTools, null, 2);
+                    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                    const url = URL.createObjectURL(dataBlob);
+                    const a = utils.createElement('a');
+                    
+                    a.href = url;
+                    a.download = 'ai-tools-data.json';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    this.showSuccess('Data exported successfully!');
+                    
+                } catch (error) {
+                    this.showError('Failed to export data: ' + error.message, error);
+                }
+            },
+            
+            importData() {
+                try {
+                    const input = utils.createElement('input');
+                    input.type = 'file';
+                    input.accept = '.json';
+                    
+                    input.onchange = (e) => {
+                        const file = e.target.files[0];
+                        if (!file) return;
+                        
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            try {
+                                // Basic validation of file content
+                                const content = event.target.result;
+                                if (typeof content !== 'string' || content.trim().length === 0) {
+                                    throw new Error('File is empty or invalid');
+                                }
+                                
+                                JSON.parse(content); // Test if it's valid JSON
+                                elements.dataTextarea.value = content;
+                                elements.dataTextarea.classList.remove('error');
+                                utils.hideElement(elements.errorMessage);
+                                
+                            } catch (error) {
+                                this.showError('Failed to read file: ' + error.message, error);
+                            }
+                        };
+                        
+                        reader.onerror = (error) => {
+                            this.showError('Failed to read file: ' + error.message, error);
+                        };
+                        
+                        reader.readAsText(file);
+                    };
+                    
+                    input.click();
+                    
+                } catch (error) {
+                    this.showError('Failed to import data: ' + error.message, error);
+                }
+            },
+            
+            applyDataChanges() {
+                try {
+                    const newData = JSON.parse(elements.dataTextarea.value);
+                    
+                    // Validate the data
+                    utils.validateToolsData(newData);
+                    
+                    // Update the data
+                    aiTools = newData;
+                    
+                    // Reset state and re-render
+                    state.currentPage = 1;
+                    state.searchTerm = '';
+                    state.activeFilters = { category: 'all', price: 'all', rating: 'all' };
+                    elements.searchInput.value = ''; // Fix: Update UI element
+                    
+                    // Update filters without full reinitialization
+                    this.updateFilterCounts();
+                    this.applyFilters();
+                    
+                    // Close modal
+                    this.closeDataModal();
+                    
+                    // Show success message
+                    this.showSuccess('Data updated successfully!');
+                    
+                } catch (error) {
+                    elements.dataTextarea.classList.add('error');
+                    utils.showElement(elements.errorMessage);
+                    elements.errorMessage.textContent = `Validation Error: ${error.message}`;
+                    elements.errorMessage.focus();
+                }
+            },
+
+            updateFilterCounts() {
+                // Update filter counts without recreating entire DOM
+                document.querySelectorAll('.count-badge').forEach(badge => {
+                    const option = badge.closest('.filter-option');
+                    if (!option) return;
+                    
+                    const filterType = option.hasAttribute('data-category') ? 'category' :
+                                     option.hasAttribute('data-price') ? 'price' : 'rating';
+                    const value = option.getAttribute(`data-${filterType}`);
+                    
+                    let count = 0;
+                    if (value === 'all') {
+                        count = aiTools.length;
+                    } else if (filterType === 'category') {
+                        count = aiTools.filter(tool => tool.tags.includes(value)).length;
+                    } else if (filterType === 'price') {
+                        count = aiTools.filter(tool => 
+                            utils.getPriceType(tool.price_model) === value
+                        ).length;
+                    } else if (filterType === 'rating') {
+                        const minRating = parseFloat(value);
+                        count = aiTools.filter(tool => tool.rating >= minRating).length;
+                    }
+                    
+                    badge.textContent = count;
+                });
+            }
+        };
+
+        // ===== INITIALIZATION & CLEANUP =====
+        document.addEventListener('DOMContentLoaded', () => {
+            // Error boundary for initialization
+            try {
+                app.init();
+            } catch (error) {
+                console.error('Critical initialization error:', error);
+                document.body.innerHTML = `
+                    <div style="padding: 2rem; text-align: center; color: white;">
+                        <h1>Something went wrong</h1>
+                        <p>We're unable to load the AI Tools Directory at the moment.</p>
+                        <button onclick="window.location.reload()" style="padding: 0.5rem 1rem; margin-top: 1rem;">
+                            Try Again
+                        </button>
+                    </div>
+                `;
+            }
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            app.cleanup();
+        });
+
+        // ===== GLOBAL ERROR HANDLING =====
+        window.addEventListener('error', (event) => {
+            console.error('Global error:', event.error);
+        });
+
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('Unhandled promise rejection:', event.reason);
+        });
+    </script>
+</body>
+</html>
